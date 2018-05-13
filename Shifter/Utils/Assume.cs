@@ -47,11 +47,7 @@ namespace Shifter.Utils
             if (to == null) throw new ArgumentNullException("to");
             if (string.IsNullOrEmpty(argumentName)) throw new ArgumentNullException("argumentName");
 
-#if NETFX_CORE
-            if (!to.GetTypeInfo().IsAssignableFrom(from.GetTypeInfo()))
-#else
             if (!to.IsAssignableFrom(from))
-#endif
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, 
                                                           Strings.TypesAreNotAssignableFrom, 

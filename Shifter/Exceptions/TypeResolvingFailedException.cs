@@ -20,9 +20,7 @@ using System.Runtime.Serialization;
 
 namespace Shifter.Exceptions
 {
-#if Windows
     [Serializable]
-#endif
     public class TypeResolvingFailedException : Exception
     {
         //
@@ -43,10 +41,9 @@ namespace Shifter.Exceptions
         public TypeResolvingFailedException(string message, Exception inner) : base(message, inner)
         {
         }
-#if Windows
+
         protected TypeResolvingFailedException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
-#endif
     }
 }

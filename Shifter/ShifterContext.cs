@@ -1,9 +1,5 @@
-﻿#if NETFX_CORE
-using System.Reflection;
-#endif
-using System;
+﻿using System;
 using System.Collections.Generic;
-
 using Shifter.Exceptions;
 using Shifter.Materializers;
 using Shifter.Strategies;
@@ -81,11 +77,7 @@ namespace Shifter
         {
             get
             {
-#if NETFX_CORE
-                return !typeToResolve.GetTypeInfo().IsAbstract && !typeToResolve.GetTypeInfo().IsInterface;
-#else
                 return !typeToResolve.IsAbstract && !typeToResolve.IsInterface;
-#endif
             }
         }
 

@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CommonServiceLocator;
-#if NETFX_CORE
-using System.Reflection;
-#endif
 using Shifter.Exceptions;
 using Shifter.Strategies;
 using Shifter.Utils;
@@ -140,11 +137,7 @@ namespace Shifter
 
             lock (syncLock)
             {
-#if NETFX_CORE
-                if (!typeToRegister.GetTypeInfo().IsAssignableFrom(dependedClass.GetType().GetTypeInfo()))
-#else
                 if (!typeToRegister.IsInstanceOfType(dependedClass))
-#endif                
                 {
                     throw new NoInheritanceDependencyException(string.Format(Strings.TypeIsNotDerivedFromOtherType, dependedClass.GetType().FullName, typeToRegister.FullName));
                 }
@@ -180,11 +173,7 @@ namespace Shifter
 
             lock (syncLock)
             {                
-#if NETFX_CORE
-                if (!typeToRegister.GetTypeInfo().IsAssignableFrom(dependedType.GetTypeInfo()))
-#else
                 if (!typeToRegister.IsAssignableFrom(dependedType))
-#endif
                 {
                     throw new NoInheritanceDependencyException(string.Format(Strings.TypeIsNotDerivedFromOtherType, dependedType.FullName, typeToRegister.FullName));
                 }
@@ -220,11 +209,7 @@ namespace Shifter
                     if (resolvedObject is Type)
                     {
                         var resolvedType = (Type)resolvedObject;
-#if NETFX_CORE
-                        if (resolvedType.GetTypeInfo().IsAbstract || resolvedType.GetTypeInfo().IsInterface)
-#else
                         if (resolvedType.IsAbstract || resolvedType.IsInterface)
-#endif
                         {
                             throw new TypeResolvingFailedException(string.Format(Strings.TypeIsAnInterfaceOrAnAbstractClass, resolvedType.FullName));
                         }

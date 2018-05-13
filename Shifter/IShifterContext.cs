@@ -29,6 +29,5 @@ namespace Shifter
         object Instance { get; set; }
         IList<IResolutionStrategy> Strategies { get; }
         bool CanCreate { get; }
-        //IList<object> Arguments { get; }
     }
 }

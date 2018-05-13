@@ -16,13 +16,12 @@
 //===============================================================================
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Shifter.Utils;
 
 namespace Shifter.Selectors
 {
-    using System.Linq;
-
     public class MethodSelector : MultipleSelector<MethodInfo>
     {
         public override IEnumerable<MethodInfo> Select(IShifterContext context)
