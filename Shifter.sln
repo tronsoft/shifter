@@ -8,16 +8,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		README.md = README.md
-		Shifter.1.0.0.nupkg = Shifter.1.0.0.nupkg
-		Shifter.1.0.1.nupkg = Shifter.1.0.1.nupkg
-		Shifter.1.0.2.nupkg = Shifter.1.0.2.nupkg
 		nuget\Shifter.1.0.3.nupkg = nuget\Shifter.1.0.3.nupkg
 		Shifter.vsmdi = Shifter.vsmdi
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shifter.Tests", "Shifter.Tests\Shifter.Tests.csproj", "{49334687-FECE-49E6-96F8-FCAE81ABA0A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shifter", "Shifter\Shifter.csproj", "{8E48BD28-0C4A-49D3-947F-251970ECB5BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shifter", "Shifter\Shifter.csproj", "{8E48BD28-0C4A-49D3-947F-251970ECB5BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
