@@ -21,7 +21,7 @@ using Shifter.Utils;
 
 namespace Shifter.Injectors
 {
-    public class FieldInjector : IInjector
+    internal class FieldInjector : IInjector
     {
         private readonly IShifterContext context;
         private readonly FieldInfo field;

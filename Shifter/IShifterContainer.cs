@@ -26,7 +26,7 @@ namespace Shifter
 
         object Resolve(string name);
 
-        object Resolve<T>(string name);
+        T Resolve<T>(string name);
 
         /// <summary>
         /// Resolves all instances.

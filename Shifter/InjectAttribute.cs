@@ -25,7 +25,7 @@ namespace Shifter
     [AttributeUsage(AttributeTargets.Constructor 
                     | AttributeTargets.Method 
                     | AttributeTargets.Property 
-                    | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+                    | AttributeTargets.Field)]
     public sealed class InjectAttribute : Attribute
     {
     }

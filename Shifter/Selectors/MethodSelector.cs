@@ -22,7 +22,7 @@ using Shifter.Utils;
 
 namespace Shifter.Selectors
 {
-    public class MethodSelector : MultipleSelector<MethodInfo>
+    internal class MethodSelector : MultipleSelector<MethodInfo>
     {
         public override IEnumerable<MethodInfo> Select(IShifterContext context)
         {

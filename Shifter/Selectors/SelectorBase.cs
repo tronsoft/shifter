@@ -20,11 +20,8 @@ using System.Reflection;
 
 namespace Shifter.Selectors
 {
-    public abstract class SelectorBase<T> : ISelector<T> where T : MemberInfo 
+    internal abstract class SelectorBase<T> : ISelector<T> where T : MemberInfo 
     {
-        public Type MemberType
-        {
-            get { return typeof(T); }
-        }
+        public Type MemberType => typeof(T);
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shifter.Exceptions;
 using Shifter.Tests.Interfaces;
 using Shifter.Tests.MockClasses;
-
-using FluentAssertions;
-using Shifter.Exceptions;
 
 namespace Shifter.Tests
 {
@@ -56,7 +55,7 @@ namespace Shifter.Tests
             const string injectedValue = "Tron";
 
             var shifter = new ShifterContainer();
-            var resolvedClassWithOneParam = (ImplementsResolveTestWithParameters)shifter.AddInstance<String>(injectedValue)
+            var resolvedClassWithOneParam = (ImplementsResolveTestWithParameters)shifter.AddInstance(injectedValue)
                                                                                         .AddType(typeof(IResolveTest), typeof(ImplementsResolveTestWithParameters))
                                                                                         .Resolve<IResolveTest>();
 
@@ -81,7 +80,7 @@ namespace Shifter.Tests
             const string injectedValue = "Tron";
 
             var shifter = new ShifterContainer();
-            var resolvedClassWithOneParam = (ImplementsResolveTestWithParameters)shifter.AddInstance<String>(injectedValue)
+            var resolvedClassWithOneParam = (ImplementsResolveTestWithParameters)shifter.AddInstance(injectedValue)
                                                                                         .AddType(typeof(IResolveTest), typeof(ImplementsResolveTestWithParameters))
                                                                                         .Resolve<IResolveTest>();
 
@@ -94,7 +93,7 @@ namespace Shifter.Tests
             const string injectedValue = "Tron";
 
             var shifter = new ShifterContainer();
-            var resolvedClassWithOneParam = (ImplementsResolveTestWithParameters)shifter.AddInstance<String>(injectedValue)
+            var resolvedClassWithOneParam = (ImplementsResolveTestWithParameters)shifter.AddInstance(injectedValue)
                                                                                         .AddType(typeof(IResolveTest), typeof(ImplementsResolveTestWithParameters))
                                                                                         .Resolve<IResolveTest>();
 
@@ -107,7 +106,7 @@ namespace Shifter.Tests
             const string injectedValue = "Tron";
 
             var shifter = new ShifterContainer();
-            var resolvedClassWithOneParam = (ImplementsResolveTestWithParameters)shifter.AddInstance<String>(injectedValue)
+            var resolvedClassWithOneParam = (ImplementsResolveTestWithParameters)shifter.AddInstance(injectedValue)
                                                                                         .AddType(typeof(IResolveTest), typeof(ImplementsResolveTestWithParameters))
                                                                                         .Resolve<IResolveTest>();
 
@@ -167,7 +166,7 @@ namespace Shifter.Tests
         public void ShifterGenericRegisterType_ARegisteredClassCanBeResolved_TheClassIsResolved()
         {
             var shifter = new ShifterContainer();
-            shifter.AddInstance<ResolveTestClass>(new ResolveTestClass());
+            shifter.AddInstance(new ResolveTestClass());
             var resolvedClass = shifter.Resolve(typeof(ResolveTestClass)) as ResolveTestClass;
 
             Assert.IsNotNull(resolvedClass);
@@ -178,7 +177,7 @@ namespace Shifter.Tests
         public void ShifterGenericResolve_ARegisteredClassIsResolved_TheClassIsResolved()
         {
             var shifter = new ShifterContainer();
-            shifter.AddInstance<ResolveTestClass>(new ResolveTestClass());
+            shifter.AddInstance(new ResolveTestClass());
             var resolvedClass = shifter.Resolve<ResolveTestClass>();
 
             Assert.IsNotNull(resolvedClass);

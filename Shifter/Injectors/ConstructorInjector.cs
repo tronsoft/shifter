@@ -20,7 +20,7 @@ using Shifter.Utils;
 
 namespace Shifter.Injectors
 {
-    public class ConstructorInjector : IInjector
+    internal class ConstructorInjector : IInjector
     {
         private readonly ConstructorInfo constructor;
         private readonly IShifterContext context;

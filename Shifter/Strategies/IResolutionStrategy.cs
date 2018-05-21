@@ -17,7 +17,7 @@
 
 namespace Shifter.Strategies
 {
-    public interface IResolutionStrategy
+    internal interface IResolutionStrategy
     {
         void Initialize(IShifterContext context);
     }

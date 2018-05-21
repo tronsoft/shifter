@@ -19,7 +19,7 @@ using Shifter.Materializers;
 
 namespace Shifter.Strategies
 {
-    public class PropertyResolutionStrategy : ResolutionStrategyBase
+    internal class PropertyResolutionStrategy : ResolutionStrategyBase
     {
         protected override void InitializeImpl(IShifterContext context)
         {

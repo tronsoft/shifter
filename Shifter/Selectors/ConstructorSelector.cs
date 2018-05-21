@@ -22,7 +22,7 @@ using Shifter.Utils;
 
 namespace Shifter.Selectors
 {
-    public class ConstructorSelector : UnarySelectorBase<ConstructorInfo>
+    internal class ConstructorSelector : UnarySelectorBase<ConstructorInfo>
     {
         public override ConstructorInfo Selecter(IShifterContext context)
         {
@@ -36,18 +36,18 @@ namespace Shifter.Selectors
             {
                 throw new NotSupportedException(Strings.MultipleConstructorInjectionIsNotSupported);
             }
-            else if (injectMarkedConstructors.Count == 1)
+
+            if (injectMarkedConstructors.Count == 1)
             {
                 return injectMarkedConstructors[0];
             }
-            else if (constructors.Count > 0)
+
+            if (constructors.Count > 0)
             {
                 return constructors[0];
             }
-            else
-            {
-                return context.TypeToResolve.GetConstructor(Type.EmptyTypes);
-            }
+
+            return context.TypeToResolve.GetConstructor(Type.EmptyTypes);
         }
     }
 }

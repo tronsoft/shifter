@@ -19,7 +19,7 @@ using System.Reflection;
 
 namespace Shifter
 {
-    public static class ReflectionHelper
+    internal static class ReflectionHelper
     {
         public static void GetConstructorParameterInfo(ConstructorInfo constructor)
         {

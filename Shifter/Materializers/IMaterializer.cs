@@ -17,7 +17,7 @@
 
 namespace Shifter.Materializers
 {
-    public interface IMaterializer
+    internal interface IMaterializer
     {
         void Engage();
     }

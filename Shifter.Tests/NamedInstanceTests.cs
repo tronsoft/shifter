@@ -12,7 +12,7 @@ namespace Shifter.Tests
         [TestInitialize]
         public void SetupTest()
         {
-            this.container = new ShifterContainer();
+            container = new ShifterContainer();
         }
 
         [TestMethod]
@@ -71,7 +71,7 @@ namespace Shifter.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void ResolveGeneric_NullNameOfInstanceIsEntered_AnExpectionIsThrown()
         {
-            container.Resolve<string>((string)null);
+            container.Resolve<string>(null);
         }
 
         [TestMethod]

@@ -11,7 +11,7 @@ namespace Shifter.Tests.MockClasses
 
         public ImplementsResolveTestWithParameters(string param1)
         {
-            this.Param1 = param1;
+            Param1 = param1;
         }
 
         public string FieldToInject => fieldToInject;

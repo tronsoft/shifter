@@ -21,7 +21,7 @@ using System.Runtime.Serialization;
 namespace Shifter.Exceptions
 {
     [Serializable]
-    public class NoInheritanceDependencyException : Exception
+    internal class NoInheritanceDependencyException : Exception
     {
         //
         // For guidelines regarding the creation of new exception types, see

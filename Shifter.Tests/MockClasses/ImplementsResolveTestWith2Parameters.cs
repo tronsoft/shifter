@@ -13,14 +13,8 @@ namespace Shifter.Tests.MockClasses
             this.param2 = param2;
         }
 
-        public string Param1
-        {
-            get { return param1; }
-        }
+        public string Param1 => param1;
 
-        public ImplementsResolveTestWithParameters Param2
-        {
-            get { return param2; }
-        }
+        public ImplementsResolveTestWithParameters Param2 => param2;
     }
 }

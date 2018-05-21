@@ -1,99 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Shifter.Exceptions;
 using Shifter.Materializers;
 using Shifter.Strategies;
 using Shifter.Utils;
+using static System.Diagnostics.Debug;
 
 namespace Shifter
 {
-    public class ShifterContext : IShifterContext
+    internal class ShifterContext : IShifterContext
     {
-        #region Private Fields
-
-        private readonly IShifterContainer container;
-        private readonly IList<IResolutionStrategy> strategies;
-        private readonly Type typeToResolve;
         private object instance;
 
-        #endregion
-
-        #region ctors
-
-        public ShifterContext(Type typeToResolve, IShifterContainer container, IList<IResolutionStrategy> strategies)
+        public ShifterContext(Type typeToResolve, IShifterContainer container, IEnumerable<Func<IResolutionStrategy>> strategyFactoryFactories)
         {
             Assume.ArgumentNotNull(typeToResolve, "typeToResolve");
             Assume.ArgumentNotNull(container, "container");
-            Assume.ArgumentNotNull(strategies, "strategies");
+            Assume.ArgumentNotNull(strategyFactoryFactories, "strategyFactoryFactories");
 
-            this.typeToResolve = typeToResolve;
-            this.container = container;
-            this.strategies = strategies;
+            TypeToResolve = typeToResolve;
+            Container = container;
+            StrategyFactories = strategyFactoryFactories;
         }
 
-        #endregion
+        public IShifterContainer Container { get; }
 
-        #region Properties
-
-        public IShifterContainer Container
-        {
-            get
-            {
-                return container;
-            }
-        }
-
-        public Type TypeToResolve
-        {
-            get
-            {
-                return typeToResolve;
-            }
-        }
+        public Type TypeToResolve { get; private set; }
 
         public object Instance
         {
-            get
-            {
-                return instance;
-            }
+            get => instance;
             set
             {
-                Assume.ArgumentNotNull(value, "value");
+                Assert(value != null);
 
                 instance = value;
             }
         }
 
-        public IList<IResolutionStrategy> Strategies
-        {
-            get
-            {
-                return strategies;
-            }
-        }
+        public IEnumerable<Func<IResolutionStrategy>> StrategyFactories { get; }
 
-        public bool CanCreate
-        {
-            get
-            {
-                return !typeToResolve.IsAbstract && !typeToResolve.IsInterface;
-            }
-        }
-
-        #endregion
+        public bool CanCreate => !TypeToResolve.IsAbstract && !TypeToResolve.IsInterface;
 
         public object Resolve()
         {
             if (!CanCreate)
             {
-                throw new TypeResolvingFailedException(string.Format(Strings.TypeIsAnInterfaceOrAnAbstractClass, typeToResolve.FullName));
+                throw new TypeResolvingFailedException(string.Format(Strings.TypeIsAnInterfaceOrAnAbstractClass, TypeToResolve.FullName));
             }
 
             var constructorMaterializer = new ConstructorMaterializer(this);
             constructorMaterializer.Engage();
 
-            foreach (var strategy in strategies)
+            foreach (var strategy in StrategyFactories.Select(s => s()))
             {
                 strategy.Initialize(this);
             }

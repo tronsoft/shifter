@@ -1,7 +1,5 @@
 ﻿using System.Linq;
-
 using FluentAssertions;
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Shifter.Tests

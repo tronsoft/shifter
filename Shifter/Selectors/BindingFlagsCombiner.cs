@@ -6,7 +6,7 @@ namespace Shifter.Selectors
     /// This class combines binding flags based on configuration. The default binding flags are 
     /// <see cref="DefaultBindingFlags">BindingFlags.Instance</see> and <see cref="DefaultBindingFlags">BindingFlags.Public</see>.
     /// </summary>
-    public class BindingFlagsCombiner
+    internal class BindingFlagsCombiner
     {
         private const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
 

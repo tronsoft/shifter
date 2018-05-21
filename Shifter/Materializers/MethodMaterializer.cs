@@ -23,7 +23,7 @@ using Shifter.Utils;
 
 namespace Shifter.Materializers
 {
-    public class MethodMaterializer : IMaterializer
+    internal class MethodMaterializer : IMaterializer
     {
         private readonly IShifterContext context;
 

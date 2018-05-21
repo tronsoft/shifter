@@ -20,10 +20,12 @@ I have a blog where I will publish information. My blog is http://www.tronsoft.n
     <PackageTags>IOC, Container, Dependency Injection</PackageTags>
     <PackageReleaseNotes>Shifter, a lightweight IoC container</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommonServiceLocator" Version="2.0.3" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>

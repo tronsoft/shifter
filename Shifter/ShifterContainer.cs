@@ -13,50 +13,25 @@ namespace Shifter
     /// </summary>
     public class ShifterContainer : IShifterContainer
     {
-        #region Nested classes
-
-        private class TypeInfo
-        {
-            public object Instance { get; set; }
-            public string Key { get; set; }
-        }
-
-        private class TypeWrapper
-        {
-            public TypeWrapper(Type type)
-            {
-                Type = type;
-            }
-
-            public Type Type { get; set; } 
-        }
-
-        #endregion
-
         /// <summary>
         /// The default container.
         /// </summary>
-        private static IShifterContainer DefaultContainer;
-
-        /// <summary>
-        /// The options used to configure the container.
-        /// </summary>
-        private readonly ShifterContainerOptions options = new ShifterContainerOptions();
+        private static IShifterContainer defaultContainer;
 
         /// <summary>
         /// A dictionary that contains the types that are registered without a name.
         /// </summary>
-        private readonly Dictionary<TypeWrapper, TypeInfo> registeredTypes = new Dictionary<TypeWrapper, TypeInfo>();
+        private readonly Dictionary<Type, (object Instance, string Name)> registeredTypes = new Dictionary<Type, (object Instance, string Name)>();
 
         /// <summary>
         /// The strategies for resolving a injection point.
         /// </summary>
-        private readonly IList<IResolutionStrategy> strategies = new List<IResolutionStrategy>
-                                                                 {
-                                                                     new PropertyResolutionStrategy(),
-                                                                     new MethodResolutionStrategy(),
-                                                                     new FieldResolutionStrategy()
-                                                                 };
+        private readonly IEnumerable<Func<IResolutionStrategy>> strategyFactories = new List<Func<IResolutionStrategy>>
+        {
+            () => new PropertyResolutionStrategy(),
+            () => new MethodResolutionStrategy(),
+            () => new FieldResolutionStrategy()
+        };
 
         /// <summary>
         /// Synchronization object.
@@ -69,35 +44,12 @@ namespace Shifter
         /// <value>
         /// The default container.
         /// </value>
-        public static IShifterContainer Default
-        {
-            get
-            {
-                return DefaultContainer ?? (DefaultContainer = new ShifterContainer());
-            }
-        }
-
-        /// <summary>
-        /// The strategies for resolving a injection point.
-        /// </summary>
-        public IList<IResolutionStrategy> Strategies
-        {
-            get
-            {
-                return strategies;
-            }
-        }
+        public static IShifterContainer Default => defaultContainer ?? (defaultContainer = new ShifterContainer());
 
         /// <summary>
         /// The options used to configure the container.
         /// </summary>
-        public ShifterContainerOptions Options
-        {
-            get
-            {
-                return options;
-            }
-        }
+        public ShifterContainerOptions Options { get; } = new ShifterContainerOptions();
 
         /// <summary>
         /// This method adds an instance to the container.
@@ -110,11 +62,7 @@ namespace Shifter
 
             lock (syncLock)
             {
-                var wrapper = new TypeWrapper(instanceToRegister.GetType());
-                registeredTypes.Add(wrapper, new TypeInfo
-                                             {
-                                                 Instance = instanceToRegister
-                                             });
+                registeredTypes.Add(instanceToRegister.GetType(), (instanceToRegister, string.Empty));
             }
 
             return this;
@@ -142,11 +90,7 @@ namespace Shifter
                     throw new NoInheritanceDependencyException(string.Format(Strings.TypeIsNotDerivedFromOtherType, dependedClass.GetType().FullName, typeToRegister.FullName));
                 }
 
-                var wrapper = new TypeWrapper(typeToRegister);
-                registeredTypes.Add(wrapper, new TypeInfo
-                                             {
-                                                 Instance = dependedClass
-                                             });
+                registeredTypes.Add(typeToRegister, (dependedClass, string.Empty));
             }
 
             return this;
@@ -172,17 +116,13 @@ namespace Shifter
             Assume.ArgumentNotNull(dependedType, "dependedType");
 
             lock (syncLock)
-            {                
+            {
                 if (!typeToRegister.IsAssignableFrom(dependedType))
                 {
                     throw new NoInheritanceDependencyException(string.Format(Strings.TypeIsNotDerivedFromOtherType, dependedType.FullName, typeToRegister.FullName));
                 }
 
-                var wrapper = new TypeWrapper(typeToRegister);
-                registeredTypes.Add(wrapper, new TypeInfo
-                                             {
-                                                 Instance = dependedType
-                                             });
+                registeredTypes.Add(typeToRegister, (dependedType, string.Empty));
             }
 
             return this;
@@ -202,13 +142,12 @@ namespace Shifter
                 if (IsTypeRegistered(type))
                 {
                     var resolvedObject = registeredTypes
-                        .Single(x => x.Key.Type == type)
+                        .Single(x => x.Key == type)
                         .Value
-                        .Instance; 
+                        .Instance;
                     Type typeToResolve;
-                    if (resolvedObject is Type)
+                    if (resolvedObject is Type resolvedType)
                     {
-                        var resolvedType = (Type)resolvedObject;
                         if (resolvedType.IsAbstract || resolvedType.IsInterface)
                         {
                             throw new TypeResolvingFailedException(string.Format(Strings.TypeIsAnInterfaceOrAnAbstractClass, resolvedType.FullName));
@@ -221,7 +160,7 @@ namespace Shifter
                         typeToResolve = resolvedObject.GetType();
                     }
 
-                    var context = new ShifterContext(typeToResolve, this, Strategies);
+                    var context = new ShifterContext(typeToResolve, this, strategyFactories);
 
                     if (!(resolvedObject is Type))
                     {
@@ -246,19 +185,19 @@ namespace Shifter
 
             lock (syncLock)
             {
-                if (registeredTypes.Values.All(x => x.Key != name))
+                if (registeredTypes.Values.All(x => x.Name != name))
                 {
                     throw new TypeResolvingFailedException(Strings.NamedTypeCouldNotBeResolved);
                 }
 
                 return registeredTypes
                     .Values
-                    .Single(x => x.Key == name)
-                    .Instance; 
+                    .Single(x => x.Name == name)
+                    .Instance;
             }
         }
 
-        public object Resolve<T>(string name)
+        public T Resolve<T>(string name)
         {
             return (T)Resolve(name);
         }
@@ -268,7 +207,7 @@ namespace Shifter
             lock (syncLock)
             {
                 return registeredTypes
-                    .Where(x => x.Key.Type == type)
+                    .Where(x => x.Key == type)
                     .Select(x => x.Value.Instance)
                     .ToList();
             }
@@ -279,11 +218,11 @@ namespace Shifter
             lock (syncLock)
             {
                 return registeredTypes
-                    .Where(x => x.Key.Type == typeof(T))
+                    .Where(x => x.Key == typeof(T))
                     .Select(x => x.Value.Instance)
                     .Cast<T>()
                     .ToList();
-            }           
+            }
         }
 
         public void Unregister(Type type)
@@ -292,11 +231,11 @@ namespace Shifter
             {
                 if (IsTypeRegistered(type))
                 {
-                    foreach (var wrapper in registeredTypes.Where(x => x.Key.Type == type)
+                    foreach (var key in registeredTypes.Where(x => x.Key == type)
                                                            .Select(x => x.Key)
                                                            .ToList())
                     {
-                        registeredTypes.Remove(wrapper);
+                        registeredTypes.Remove(key);
                     }
                 }
             }
@@ -309,7 +248,10 @@ namespace Shifter
 
         public void Reset()
         {
-            registeredTypes.Clear();
+            lock (syncLock)
+            {
+                registeredTypes.Clear();
+            }
         }
 
         public bool IsTypeRegistered(Type type)
@@ -318,7 +260,7 @@ namespace Shifter
 
             lock (syncLock)
             {
-                return registeredTypes.Any(x => x.Key.Type == type);
+                return registeredTypes.Any(x => x.Key == type);
             }
         }
 
@@ -335,12 +277,7 @@ namespace Shifter
 
             lock (syncLock)
             {
-                var wrapper = new TypeWrapper(instanceToRegister.GetType());
-                registeredTypes.Add(wrapper, new TypeInfo
-                                             {
-                                                 Instance = instanceToRegister, 
-                                                 Key = name
-                                             }); 
+                registeredTypes.Add(instanceToRegister.GetType(), (instanceToRegister, name ?? string.Empty));
             }
 
             return this;
@@ -380,18 +317,16 @@ namespace Shifter
             }
             catch (TypeResolvingFailedException ex)
             {
-                throw new ActivationException(string.Format("Could not resolve an object with {0} key", key), ex);
+                throw new ActivationException($"Could not resolve an object with {key} key", ex);
             }
             catch (NoInheritanceDependencyException ex)
             {
-                throw new ActivationException(string.Format("Could not resolve an object with {0} key", key), ex);
+                throw new ActivationException($"Could not resolve an object with {key} key", ex);
             }
 
             if (resolved.GetType() != serviceType)
             {
-                throw new ActivationException(string.Format("Could not resolve an object with {0} key and type {1}", 
-                                                            key, 
-                                                            serviceType.FullName));
+                throw new ActivationException($"Could not resolve an object with {key} key and type {serviceType.FullName}");
             }
 
             return resolved;

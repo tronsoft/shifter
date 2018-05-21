@@ -8,8 +8,8 @@ namespace Shifter.Tests.MockClasses
 
         public string InjectedProperty
         {
-            get { return injectedProperty; }
-            set { injectedProperty = value; }
+            get => injectedProperty;
+            set => injectedProperty = value;
         }
 
         [Inject]

@@ -20,7 +20,7 @@ using System.Reflection;
 
 namespace Shifter.Selectors
 {
-    public abstract class MultipleSelector<T> : SelectorBase<T> where T : MemberInfo 
+    internal abstract class MultipleSelector<T> : SelectorBase<T> where T : MemberInfo 
     {
         public abstract IEnumerable<T> Select(IShifterContext context);
     }

@@ -21,7 +21,7 @@ using System.Runtime.Serialization;
 namespace Shifter.Exceptions
 {
     [Serializable]
-    public class TypeRegisterException : Exception
+    internal class TypeRegisterException : Exception
     {
         //
         // For guidelines regarding the creation of new exception types, see

@@ -22,7 +22,7 @@ using Shifter.Utils;
 
 namespace Shifter.Materializers
 {
-    public class FieldMaterializer : IMaterializer
+    internal class FieldMaterializer : IMaterializer
     {
         private readonly IShifterContext context;
 

@@ -21,13 +21,13 @@ using Shifter.Strategies;
 
 namespace Shifter
 {
-    public interface IShifterContext
+    internal interface IShifterContext
     {
         IShifterContainer Container { get; }
         Type TypeToResolve { get; }
         object Resolve();
         object Instance { get; set; }
-        IList<IResolutionStrategy> Strategies { get; }
+        IEnumerable<Func<IResolutionStrategy>> StrategyFactories { get; }
         bool CanCreate { get; }
     }
 }

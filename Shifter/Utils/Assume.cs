@@ -20,7 +20,7 @@ using System.Globalization;
 
 namespace Shifter.Utils
 {
-    public static class Assume
+    internal static class Assume
     {
         public static void ArgumentNotNull(object argument, string argumentName)
         {

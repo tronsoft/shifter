@@ -20,7 +20,7 @@ using Shifter.Utils;
 
 namespace Shifter.Strategies
 {
-    public abstract class ResolutionStrategyBase : IResolutionStrategy
+    internal abstract class ResolutionStrategyBase : IResolutionStrategy
     {
         public void Initialize(IShifterContext context)
         {

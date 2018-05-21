@@ -17,7 +17,7 @@
 
 namespace Shifter.Injectors
 {
-    public interface IInjector
+    internal interface IInjector
     {
         void Inject();
     }

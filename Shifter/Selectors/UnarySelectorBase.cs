@@ -19,7 +19,7 @@ using System.Reflection;
 
 namespace Shifter.Selectors
 {
-    public abstract class UnarySelectorBase<T> : SelectorBase<T> where T : MemberInfo 
+    internal abstract class UnarySelectorBase<T> : SelectorBase<T> where T : MemberInfo 
     {
         public abstract T Selecter(IShifterContext context);
     }

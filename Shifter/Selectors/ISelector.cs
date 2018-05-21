@@ -20,7 +20,7 @@ using System.Reflection;
 
 namespace Shifter.Selectors
 {
-    public interface ISelector<T> where T : MemberInfo
+    internal interface ISelector<T> where T : MemberInfo
     {
         Type MemberType { get; }
     }
