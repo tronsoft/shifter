@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Shifter.Exceptions;
-using Shifter.Materializers;
 using Shifter.Strategies;
 using Shifter.Utils;
 using static System.Diagnostics.Debug;
@@ -40,25 +37,5 @@ namespace Shifter
         }
 
         public IEnumerable<Func<IResolutionStrategy>> StrategyFactories { get; }
-
-        public bool CanCreate => !TypeToResolve.IsAbstract && !TypeToResolve.IsInterface;
-
-        public object Resolve()
-        {
-            if (!CanCreate)
-            {
-                throw new TypeResolvingFailedException(string.Format(Strings.TypeIsAnInterfaceOrAnAbstractClass, TypeToResolve.FullName));
-            }
-
-            var constructorMaterializer = new ConstructorMaterializer(this);
-            constructorMaterializer.Engage();
-
-            foreach (var strategy in StrategyFactories.Select(s => s()))
-            {
-                strategy.Initialize(this);
-            }
-
-            return instance;
-        }
     }
 }

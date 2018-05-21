@@ -25,9 +25,7 @@ namespace Shifter
     {
         IShifterContainer Container { get; }
         Type TypeToResolve { get; }
-        object Resolve();
         object Instance { get; set; }
         IEnumerable<Func<IResolutionStrategy>> StrategyFactories { get; }
-        bool CanCreate { get; }
     }
 }

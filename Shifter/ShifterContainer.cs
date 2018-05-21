@@ -167,7 +167,7 @@ namespace Shifter
                         context.Instance = resolvedObject;
                     }
 
-                    return context.Resolve();
+                    return new ResolveProvider(context).Resolve();
                 }
             }
 
@@ -232,8 +232,8 @@ namespace Shifter
                 if (IsTypeRegistered(type))
                 {
                     foreach (var key in registeredTypes.Where(x => x.Key == type)
-                                                           .Select(x => x.Key)
-                                                           .ToList())
+                                                       .Select(x => x.Key)
+                                                       .ToList())
                     {
                         registeredTypes.Remove(key);
                     }
